@@ -1,24 +1,48 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Green Stay - Carbon Offset Program</title>
-    <meta name="description" content="Professional hotel carbon offset management platform by Sonoran Palm Solutions LLC. Track and manage $2 per night carbon credit charges for sustainable hospitality." />
-    <meta name="author" content="Lovable" />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GreenStay™ — $2 Carbon Offset</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="./config.js"></script>
+  <style>body { font-family: sans-serif; }</style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <main class="max-w-xl mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4">GreenStay™</h1>
+    <p>Offset your stay for <b>$2.00</b> per room-night.</p>
 
-    <meta property="og:title" content="5ef5ff8e-29c2-4f8e-ad58-8dc2a90e891a" />
-    <meta property="og:description" content="Lovable Generated Project" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <label>Nights: <input id="nights" type="number" value="1" min="1"></label><br>
+    <label>Rooms: <input id="rooms" type="number" value="1" min="1"></label><br><br>
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-  </head>
+    <div>Total: <span id="total">$2.00</span></div><br>
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+    <button id="checkoutBtn" class="bg-green-600 text-white px-4 py-2 rounded">Offset Now</button>
+  </main>
+
+  <script>
+    const priceCents = 200;
+    const nightsEl = document.getElementById('nights');
+    const roomsEl = document.getElementById('rooms');
+    const totalEl = document.getElementById('total');
+    const btn = document.getElementById('checkoutBtn');
+
+    function updateTotal() {
+      const nights = Math.max(1, parseInt(nightsEl.value||'1'));
+      const rooms = Math.max(1, parseInt(roomsEl.value||'1'));
+      totalEl.textContent = '$' + (2 * nights * rooms).toFixed(2);
+    }
+    nightsEl.addEventListener('input', updateTotal);
+    roomsEl.addEventListener('input', updateTotal);
+
+    btn.addEventListener('click', () => {
+      if (!window.GREENSTAY_STRIPE_LINK) {
+        alert("Stripe link not set in config.js");
+        return;
+      }
+      window.open(window.GREENSTAY_STRIPE_LINK, "_blank");
+    });
+  </script>
+</body>
 </html>
